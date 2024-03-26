@@ -4,3 +4,8 @@
 # Ignore Python compiled files
 *.pyc
 __pycache__/
+
+# ignore virtualenv
+env
+venv
+.venv
