@@ -1,0 +1,6 @@
+# Ignore PyCharm files
+.idea
+
+# Ignore Python compiled files
+*.pyc
+__pycache__/

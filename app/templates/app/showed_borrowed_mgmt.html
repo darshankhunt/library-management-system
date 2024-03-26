@@ -1,0 +1,146 @@
+<!-- add_to_management_system.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add to Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 50px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="file"],
+        select {
+            margin-bottom: 10px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        thead th {
+            background-color: #f2f2f2;
+            scroll-behavior: auto;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <p><a href="{% url 'book_list' %}">X</a></p>
+        <h2>Add to Management System</h2>
+        <form method="post" action="{% url 'borrow' %}">
+            {% csrf_token %}
+            <!-- Book select dropdown -->
+            <label for="book_select">Select Book:</label>
+            <select id="book_select" name="book_select" required>
+                <option value="" disabled selected>Select a book</option>
+                {% for book in books %}
+                <option value="{{ book.id }}">{{ book.title }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Name" required>
+
+            <label for="department">Department:</label>
+            <input type="text" id="department" name="department" placeholder="Department" required>
+
+            <input type="submit" value="Add to Management System">
+        </form>
+        <br><br>
+        <h2>Management System</h2>
+        <table>
+            <thead>
+                <tr>
+
+                    <th>Book ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Fine</th>
+                    <th>Title</th>
+                    <th>Borrow date</th>
+                    <th>Actions</th>
+                    <th>Returned</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for borrow in borrows %}
+                <tr>
+                    <td>{{ borrow.book_id }}</td>
+                    <td>{{ borrow.name }}</td>
+                    <td>{{ borrow.department }}</td>
+                    <td>{{ borrow.fine }}</td>
+                    <td>{{ borrow.book.title }}</td>
+                    <td>{{ borrow.borrow_date }}</td>
+                    <td>
+                        <form method="post" action="{% url 'return_book' pk=borrow.pk %}">
+                            {% csrf_token %}
+                            <input type="submit" value="Return">
+                        </form>
+                    </td>
+                    <td>{{ borrow.returned }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</body>
+
+</html>
